@@ -14,6 +14,7 @@ const employeeRoute = require("./route/employee");
 app.use(bodyParser.json());
 
 User.hasOne(Employee);
+Employee.belongsTo(User);
 User.hasOne(HRAdmin);
 LeaveBalance.belongsTo(Employee);
 LeaveBalance.belongsTo(LeaveType);

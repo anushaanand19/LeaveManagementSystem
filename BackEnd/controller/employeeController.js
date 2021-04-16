@@ -24,12 +24,15 @@ exports.updatingEmployee = async (req, res, next) => {
 };
 
 exports.fetchingAllEmployees = async (req, res, next) => {
-  const employeeList = await User.findAll();
+  const employeeList = await User.findAll({ include: Employee });
   res.json(employeeList);
 };
 
 exports.fetchingEmployee = async (req, res, next) => {
-  const employee = await User.findOne({ where: { id: req.params.id } });
+  const employee = await Employee.findOne({
+    where: { id: req.params.id },
+    include: Employee,
+  });
   if (!employee) {
     res.status(404).json({ message: "User not found" });
   } else {
