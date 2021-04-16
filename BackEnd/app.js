@@ -1,25 +1,27 @@
 const express = require("express");
 const sequelizeConnection = require("./util/database");
 const app = express();
+const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const User = require("./model/user");
-const HRAdmin = require("./model/HRAdmin");
+const HRAdmin = require("./model/hrAdmin");
 const Employee = require("./model/employee");
 const Leave = require("./model/leave");
 const LeaveType = require("./model/leaveType");
 const LeaveBalance = require("./model/leaveBalance");
+const employeeRoute = require("./route/employee");
 
-app.use((req, res, next) => {
-  res.send("Hello World! This is the backend project");
-});
+app.use(bodyParser.json());
 
-User.hasMany(Employee);
-User.hasMany(HRAdmin);
+User.hasOne(Employee);
+User.hasOne(HRAdmin);
 LeaveBalance.belongsTo(Employee);
 LeaveBalance.belongsTo(LeaveType);
 Leave.belongsTo(LeaveType);
 Leave.belongsTo(Employee);
 
-sequelize.sync().then((result) => console.log(result));
+app.use("/employee", employeeRoute);
+
+//sequelize.sync({ force: true }).then();
 
 app.listen(3001);
