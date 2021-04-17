@@ -1,11 +1,13 @@
 const Employee = require("../model/employee");
 const User = require("../model/user");
+const bcrypt = require("bcrypt");
 
 exports.creatingEmployee = async (req, res, next) => {
+  const encryptedPwd = bcrypt.hashSync(req.body.password, 10);
   const createdUser = await User.create({
     name: req.body.name,
     officialEmailId: req.body.email,
-    password: req.body.password,
+    password: encryptedPwd,
   });
   const createdEmployee = await createdUser.createEmployee({
     PAN: req.body.PAN,
