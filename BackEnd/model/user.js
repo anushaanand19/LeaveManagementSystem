@@ -16,7 +16,13 @@ const User = sequelizeConnection.define("user", {
   officialEmailId: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
+    validate: {
+      isEmail: true,
+    },
+    unique: {
+      args: true,
+      msg: "Email address already in use!",
+    },
   },
   password: {
     type: Sequelize.STRING,

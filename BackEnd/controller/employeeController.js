@@ -4,46 +4,72 @@ const bcrypt = require("bcrypt");
 
 exports.creatingEmployee = async (req, res, next) => {
   const encryptedPwd = bcrypt.hashSync(req.body.password, 10);
-  const createdUser = await User.create({
-    name: req.body.name,
-    officialEmailId: req.body.email,
-    password: encryptedPwd,
-  });
-  const createdEmployee = await createdUser.createEmployee({
-    PAN: req.body.PAN,
-    DOB: new Date(req.body.DOB),
-  });
-  res.json({ user: createdUser, employee: createdEmployee });
+  try {
+    const createdUser = await User.create({
+      name: req.body.name,
+      officialEmailId: req.body.email,
+      password: encryptedPwd,
+    });
+    const createdEmployee = await createdUser.createEmployee({
+      PAN: req.body.PAN,
+      DOB: new Date(req.body.DOB),
+    });
+    const employeeList = await User.findAll({
+      include: Employee,
+      attributes: { exclude: ["password"] },
+    });
+    res.json(employeeList);
+  } catch (e) {
+    res.status(409).json({ message: e.errors[0].message });
+  }
 };
 
 exports.updatingEmployee = async (req, res, next) => {
-  await User.update(
-    { name: req.body.name, officialEmailId: req.body.email },
-    { where: { id: req.params.id } }
-  );
-  const updatedUser = await User.findOne({ id: req.params.id });
-  res.json(updatedUser);
+  try {
+    const user = await User.findOne({ where: { id: req.params.id } });
+    const updatedUser = await user.update({
+      name: req.body.name,
+      officialEmailId: req.body.email,
+    });
+    res.json({ message: "UserUpdated", user: updatedUser });
+  } catch (e) {
+    res.status(409).json({ message: e.errors[0].message });
+  }
 };
 
 exports.fetchingAllEmployees = async (req, res, next) => {
-  const employeeList = await User.findAll({ include: Employee });
-  res.json(employeeList);
+  try {
+    const employeeList = await User.findAll({
+      include: Employee,
+      attributes: { exclude: ["password"] },
+    });
+    res.json(employeeList);
+  } catch (e) {
+    res.status(404).json({ message: e.errors[0].message });
+  }
 };
 
 exports.fetchingEmployee = async (req, res, next) => {
-  const employee = await Employee.findOne({
-    where: { id: req.params.id },
-    include: Employee,
-  });
-  if (!employee) {
-    res.status(404).json({ message: "User not found" });
-  } else {
+  try {
+    const employee = await Employee.findOne({
+      where: { id: req.params.id },
+      include: Employee,
+      attributes: { exclude: ["password"] },
+    });
     res.json(employee);
+  } catch (e) {
+    res.status(404).json({ message: e.errors[0].message });
   }
 };
 
 exports.deletingEmployee = async (req, res, next) => {
-  const user = await User.findOne({ where: { id: req.params.id } });
-  const employeeToDelete = user.destroy({ where: { id: user.id } });
-  res.send("Employee Deleted");
+  try {
+    const employeeToDelete = await User.destroy({
+      where: { id: req.params.id },
+      include: Employee,
+    });
+    res.json({ message: "Employee Deleted" });
+  } catch (e) {
+    res.status(404).json({ message: e.errors[0].message });
+  }
 };

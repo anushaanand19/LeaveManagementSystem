@@ -2,7 +2,13 @@ const Sequelize = require("sequelize");
 const sequelizeConnection = require("../util/database");
 
 const Employee = sequelizeConnection.define("employee", {
-  PAN: Sequelize.STRING,
+  PAN: {
+    type: Sequelize.STRING,
+    unique: {
+      args: true,
+      msg: "PAN already in use! Please check again",
+    },
+  },
   DOB: Sequelize.DATE,
 });
 

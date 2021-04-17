@@ -9,12 +9,11 @@ const Employee = require("./model/employee");
 const Leave = require("./model/leave");
 const LeaveType = require("./model/leaveType");
 const LeaveBalance = require("./model/leaveBalance");
-const employeeRoute = require("./route/employee");
+const employeeRoute = require("./route/employeeRoute");
 
 app.use(bodyParser.json());
 
-User.hasOne(Employee);
-Employee.belongsTo(User);
+User.hasOne(Employee, { onDelete: "cascade" });
 User.hasOne(HRAdmin);
 LeaveBalance.belongsTo(Employee);
 LeaveBalance.belongsTo(LeaveType);
