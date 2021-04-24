@@ -10,6 +10,7 @@ const Leave = require("./model/leave");
 const LeaveType = require("./model/leaveType");
 const LeaveBalance = require("./model/leaveBalance");
 const employeeRoute = require("./route/employeeRoute");
+const loginRoute = require("./route/loginRoute");
 
 app.use(bodyParser.json());
 
@@ -21,6 +22,7 @@ Leave.belongsTo(LeaveType);
 Leave.belongsTo(Employee);
 
 app.use("/employee", employeeRoute);
+app.use(loginRoute);
 
 //sequelize.sync({ force: true }).then();
 
