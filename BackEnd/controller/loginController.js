@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../model/user");
+const { v4: uuidv4 } = require("uuid");
 
 exports.postLogin = async (req, res, next) => {
   const ERROR_MESSAGE = "Invalid credentials";
@@ -11,12 +12,14 @@ exports.postLogin = async (req, res, next) => {
       throw { message: ERROR_MESSAGE };
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!(isPasswordValid || user)) {
+    if (!isPasswordValid || !user) {
       throw { message: ERROR_MESSAGE };
     }
+    user.token = uuidv4();
+    await user.save();
     user.password = undefined; //TODO: need to figure out a better approach
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (e) {
-    res.status(401).json(e.message);
+    res.status(401).json(e);
   }
 };

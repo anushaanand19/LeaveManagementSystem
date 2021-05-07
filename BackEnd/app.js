@@ -11,8 +11,10 @@ const LeaveType = require("./model/leaveType");
 const LeaveBalance = require("./model/leaveBalance");
 const employeeRoute = require("./route/employeeRoute");
 const loginRoute = require("./route/loginRoute");
+const cors = require("cors");
 
 app.use(bodyParser.json());
+app.use(cors());
 
 User.hasOne(Employee, { onDelete: "cascade" });
 User.hasOne(HRAdmin);

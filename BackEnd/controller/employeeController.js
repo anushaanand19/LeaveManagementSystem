@@ -49,17 +49,18 @@ exports.fetchingAllEmployees = async (req, res, next) => {
   }
 };
 
-exports.fetchingEmployee = async (req, res, next) => {
-  try {
-    const employee = await Employee.findOne({
-      where: { id: req.params.id },
-      include: Employee,
-      attributes: { exclude: ["password"] },
+exports.fetchingEmployee = (req, res, next) => {
+  User.findOne({
+    where: { id: req.params.id },
+    include: Employee,
+    attributes: { exclude: ["password"] },
+  })
+    .then((employee) => {
+      res.json(employee);
+    })
+    .catch((e) => {
+      res.status(404).json({ message: e.errors[0].message });
     });
-    res.json(employee);
-  } catch (e) {
-    res.status(404).json({ message: e.errors[0].message });
-  }
 };
 
 exports.deletingEmployee = async (req, res, next) => {
