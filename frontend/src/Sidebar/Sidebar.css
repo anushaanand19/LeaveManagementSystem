@@ -1,0 +1,30 @@
+.sidebar-navigation {
+  width: 240px;
+  background-color: teal;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  margin: 0;
+  border-color: black;
+  color: white;
+  box-shadow: 3px 2px 4px #bbbbbb;
+  box-sizing: border-box;
+}
+
+.sidebar-items {
+  margin-top: 16px;
+}
+
+.sidebar-item {
+  color: white;
+}
+
+ul,
+li,
+a {
+  text-decoration: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 8px;
+}
