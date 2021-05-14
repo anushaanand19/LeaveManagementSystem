@@ -4,12 +4,13 @@
   font-size: 24px;
   align-items: center;
   justify-content: center;
-  min-height: 90vh;
+  padding: 0;
   margin: 0;
   border-color: black;
   color: white;
   box-shadow: 3px 2px 4px #bbbbbb;
   box-sizing: border-box;
+  height: 90vh;
 }
 
 .sidebar-items {
@@ -25,6 +26,9 @@ li,
 a {
   text-decoration: none;
   list-style-type: none;
-  margin: 0;
-  padding: 8px;
+  margin-top: 8px;
+}
+
+li {
+  padding: 12px;
 }
