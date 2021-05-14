@@ -36,7 +36,7 @@ class Login extends Component {
       user = await user.json();
       // saver in localstore
       localStorage.setItem("user", JSON.stringify(user));
-      history.push("/dashboard");
+      history.push("/");
     } else {
       user = await user.json();
       alert(user.message);

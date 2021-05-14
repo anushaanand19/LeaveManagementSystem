@@ -13,7 +13,19 @@ class Router extends Component {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/dashboard">
+        <Route path="/all-employees">
+          <Dashboard />
+        </Route>
+        <Route path="/upcoming-leaves">
+          <Dashboard />
+        </Route>
+        <Route path="/modify-leaves">
+          <Dashboard />
+        </Route>
+        <Route path="/personal-details">
+          <Dashboard />
+        </Route>
+        <Route path="/leave-records">
           <Dashboard />
         </Route>
       </BrowserRouter>

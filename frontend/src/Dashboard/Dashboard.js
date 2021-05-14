@@ -36,10 +36,9 @@ class Dashboard extends React.Component {
           }
         );
         employee = await employee.json();
-        this.setState({ employee: user });
-        console.log(employee);
+        this.setState({ employee: employee });
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     } else {
       const { history } = this.props;
