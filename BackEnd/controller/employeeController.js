@@ -5,15 +5,19 @@ const bcrypt = require("bcrypt");
 exports.creatingEmployee = async (req, res, next) => {
   const encryptedPwd = bcrypt.hashSync(req.body.password, 10);
   try {
-    const createdUser = await User.create({
-      name: req.body.name,
-      officialEmailId: req.body.email,
-      password: encryptedPwd,
-    });
-    const createdEmployee = await createdUser.createEmployee({
-      PAN: req.body.PAN,
-      DOB: new Date(req.body.DOB),
-    });
+    await User.create(
+      {
+        name: req.body.name,
+        officialEmailId: req.body.email,
+        password: encryptedPwd,
+        userType: req.body.userType,
+        employee: {
+          PAN: req.body.PAN,
+          DOB: new Date(req.body.DOB),
+        },
+      },
+      { include: { association: User.Employee } }
+    );
     const employeeList = await User.findAll({
       include: Employee,
       attributes: { exclude: ["password"] },
