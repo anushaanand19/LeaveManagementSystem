@@ -6,17 +6,20 @@ const { Op } = require("sequelize");
 exports.creatingEmployee = async (req, res, next) => {
   const encryptedPwd = bcrypt.hashSync(req.body.password, 10);
   try {
-    const createdUser = await User.create({
-      name: req.body.name,
-      officialEmailId: req.body.email,
-      password: encryptedPwd,
-    });
-    const createdEmployee = await createdUser.createEmployee({
-      PAN: req.body.PAN,
-      DOB: new Date(req.body.DOB),
-    });
-    const employeeList = await User.findOne({
-      where: { id: createdUser.id },
+    await User.create(
+      {
+        name: req.body.name,
+        officialEmailId: req.body.email,
+        password: encryptedPwd,
+        userType: req.body.userType,
+        employee: {
+          PAN: req.body.PAN,
+          DOB: new Date(req.body.DOB),
+        },
+      },
+      { include: { association: User.Employee } }
+    );
+    const employeeList = await User.findAll({
       include: Employee,
       attributes: { exclude: ["password"] },
     });
@@ -61,18 +64,18 @@ exports.fetchingAllEmployees = async (req, res, next) => {
   }
 };
 
-exports.fetchingEmployee = async (req, res, next) => {
-  try {
-    const employee = await Employee.findOne({
-      where: { id: req.params.id },
-      include: Employee,
-      attributes: { exclude: ["password"] },
+exports.fetchingEmployee = (req, res, next) => {
+  User.findOne({
+    where: { id: req.params.id },
+    include: Employee,
+    attributes: { exclude: ["password"] },
+  })
+    .then((employee) => {
+      res.json(employee);
+    })
+    .catch((e) => {
+      res.status(404).json({ message: e.errors[0].message });
     });
-
-    res.json(employee);
-  } catch (e) {
-    res.status(404).json({ message: e.errors[0].message });
-  }
 };
 
 exports.deletingEmployee = async (req, res, next) => {

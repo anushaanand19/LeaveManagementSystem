@@ -28,6 +28,13 @@ const User = sequelizeConnection.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  token: {
+    type: Sequelize.STRING,
+  },
+  userType: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = User;
