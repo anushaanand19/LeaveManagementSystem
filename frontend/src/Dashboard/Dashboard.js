@@ -8,15 +8,13 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      leaveBalances: {
-        leaveType: "",
-        balance: "",
-      },
-      employee: {
+      user: "",
+      allEmployees: {
         name: "",
         DOB: "",
         PAN: "",
         id: "",
+        leaveBalance: "",
       },
     };
   }
@@ -25,18 +23,15 @@ class Dashboard extends React.Component {
     if (user) {
       user = JSON.parse(user);
       try {
-        let employee = await fetch(
-          `http://localhost:3001/employee/${user.id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
-        employee = await employee.json();
-        this.setState({ employee: employee });
+        user = await fetch(`http://localhost:3001/employee/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+        user = await user.json();
+        this.setState({ user: user });
       } catch (e) {
         alert(e);
       }
@@ -51,7 +46,6 @@ class Dashboard extends React.Component {
         <Header />
         <div className="content">
           <Sidebar />
-          <h1 style={{ margin: "20px" }}>Hi {this.state.employee.name},</h1>
         </div>
       </div>
     );
