@@ -10,6 +10,7 @@ const Employee = sequelizeConnection.define("employee", {
     },
   },
   DOB: Sequelize.DATE,
+  designation: Sequelize.STRING,
 });
 
 module.exports = Employee;
