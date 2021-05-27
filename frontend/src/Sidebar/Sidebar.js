@@ -1,47 +1,51 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
 class Sidebar extends Component {
-  hrMenuItems = [
-    {
-      label: "All Employees",
-      href: "/all-employees",
-    },
-    {
-      label: "Upcoming Leaves",
-      href: "/upcoming-leaves",
-    },
-    {
-      label: "Modify Leaves",
-      href: "/modify-leaves",
-    },
-  ];
-  defaultMenuItems = [
-    {
-      label: "Personal Details",
-      href: "/personal-details",
-    },
-    {
-      label: "Leave Records",
-      href: "/leave-records",
-    },
-  ];
   constructor(props) {
     super(props);
     this.state = {
       menuItems: [],
+      user: "",
     };
   }
 
   async componentDidMount() {
     let user = JSON.parse(localStorage.getItem("user"));
+    let hrMenuItems = [
+      {
+        label: "All Employees",
+        href: "/employee/all-employees",
+      },
+      {
+        label: "Upcoming Leaves",
+        href: `/employee/upcoming-leaves/${user.id}`,
+      },
+      {
+        label: "Modify Leaves",
+        href: `/employee/modify-leaves/${user.id}`,
+      },
+    ];
+    let defaultMenuItems = [
+      {
+        label: "Personal Details",
+        href: `/employee/personal-details/${user.id}`,
+      },
+      {
+        label: "Leave Records",
+        href: `/employee/leave-records/${user.id}`,
+      },
+    ];
     if (user.userType === "HR") {
       this.setState({
-        menuItems: this.defaultMenuItems.concat(this.hrMenuItems),
+        menuItems: defaultMenuItems.concat(hrMenuItems),
+        user: user,
       });
     } else {
       this.setState({
-        menuItems: this.defaultMenuItems,
+        menuItems: defaultMenuItems,
+        user: user,
       });
     }
   }
@@ -55,9 +59,9 @@ class Sidebar extends Component {
                 key={this.state.menuItems.indexOf(menuItem)}
                 className="sidebar-items"
               >
-                <a className="sidebar-item" href={menuItem.href}>
+                <Link className="sidebar-item" to={{ pathname: menuItem.href }}>
                   {menuItem.label}
-                </a>
+                </Link>
               </li>
             );
           })}
