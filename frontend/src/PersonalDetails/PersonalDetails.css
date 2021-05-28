@@ -43,3 +43,8 @@
   transform: none;
   font-weight: 500;
 }
+
+.form-control {
+  padding: 4px;
+  margin: 4px 0;
+}

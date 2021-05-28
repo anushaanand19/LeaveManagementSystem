@@ -3,6 +3,7 @@ import Header from "../Header/Header.js";
 import Sidebar from "../Sidebar/Sidebar";
 import { withRouter } from "react-router-dom";
 import "./Dasboard.css";
+import { HttpUtil } from "../Utils/HttpUtil";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -23,15 +24,8 @@ class Dashboard extends React.Component {
     if (user) {
       user = JSON.parse(user);
       try {
-        user = await fetch(`http://localhost:3001/employee/${user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-        user = await user.json();
-        this.setState({ user: user });
+        user = await HttpUtil.get(`http://localhost:3001/employee/${user.id}`);
+        this.setState({ user: user || "User" });
       } catch (e) {
         alert(e);
       }
@@ -46,6 +40,9 @@ class Dashboard extends React.Component {
         <Header />
         <div className="content">
           <Sidebar />
+          <div className="main-container">
+            <h1>Welcome {this.state.user.name},</h1>
+          </div>
         </div>
       </div>
     );

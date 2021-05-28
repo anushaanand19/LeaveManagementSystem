@@ -34,7 +34,7 @@ class PersonalDetails extends Component {
         <div className="content">
           <Sidebar />
           <div className="main-container">
-            <div className="sub-section">
+            <div className="form-group">
               <div className="heading">
                 <div className="title"> Personal Details</div>
                 <Link
@@ -69,7 +69,7 @@ class PersonalDetails extends Component {
                 </div>
               </div>
             </div>
-            <div className="sub-section">
+            <div className="form-group">
               <div className="heading">
                 <div className="title"> Contact Details</div>
                 <a className="edit-button" href="http://">
