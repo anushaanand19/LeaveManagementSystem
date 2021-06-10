@@ -1,6 +1,7 @@
 const Employee = require("../model/employee");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
 
 exports.creatingEmployee = async (req, res, next) => {
   const encryptedPwd = bcrypt.hashSync(req.body.password, 10);
@@ -43,13 +44,23 @@ exports.updatingEmployee = async (req, res, next) => {
 
 exports.fetchingAllEmployees = async (req, res, next) => {
   try {
-    const employeeList = await User.findAll({
+    const searchParameters = {
       include: Employee,
       attributes: { exclude: ["password"] },
-    });
+    };
+    if (req.query.q) {
+      searchParameters.where = {
+        name: { [Op.like]: "%" + req.query.q + "%" },
+        officialEmailId: { [Op.like]: "%" + req.query.q + "%" },
+      };
+    }
+    console.log(searchParameters);
+    const employeeList = await User.findAll(searchParameters);
+
     res.json(employeeList);
   } catch (e) {
-    res.status(404).json({ message: e.errors[0].message });
+    console.log(e);
+    res.status(404).json({ message: e.toString() });
   }
 };
 
@@ -78,3 +89,5 @@ exports.deletingEmployee = async (req, res, next) => {
     res.status(404).json({ message: e.errors[0].message });
   }
 };
+
+exports.searchingEmployees = async (req, res, next) => {};
