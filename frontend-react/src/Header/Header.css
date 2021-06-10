@@ -1,0 +1,34 @@
+.header {
+  height: 10vh;
+  color: black;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #008080;
+  box-shadow: 3px 2px 4px #bbbbbb;
+}
+
+ul,
+li,
+a {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.navigation {
+  display: flex;
+  margin: 16px;
+  border-radius: 10px;
+}
+
+.navigation-item {
+  margin: 24px;
+  margin-left: auto;
+  color: white;
+}
+
+.logo {
+  color: white;
+  margin-left: 48px;
+}
