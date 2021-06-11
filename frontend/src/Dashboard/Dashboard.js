@@ -3,6 +3,7 @@ import Header from "../Header/Header.js";
 import Sidebar from "../Sidebar/Sidebar";
 import { withRouter } from "react-router-dom";
 import "./Dasboard.css";
+import { HttpUtil } from "../Utils/HttpUtil";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -19,25 +20,18 @@ class Dashboard extends React.Component {
     };
   }
   async componentDidMount() {
-    let user = localStorage.getItem("user");
-    if (user) {
-      user = JSON.parse(user);
-      try {
-        user = await fetch(`http://localhost:3001/employee/${user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-        user = await user.json();
-        this.setState({ user: user });
-      } catch (e) {
-        alert(e);
+    try {
+      let user = localStorage.getItem("user");
+      if (user) {
+        user = JSON.parse(user);
+        user = await HttpUtil.get(`http://localhost:3001/employee/${user.id}`);
+        this.setState({ user: user || "User" });
+      } else {
+        const { history } = this.props;
+        history.push("/login");
       }
-    } else {
-      const { history } = this.props;
-      history.push("/login");
+    } catch (e) {
+      alert(e);
     }
   }
   render() {
@@ -46,6 +40,9 @@ class Dashboard extends React.Component {
         <Header />
         <div className="content">
           <Sidebar />
+          <div className="main-container">
+            <h1>Welcome {this.state.user.name},</h1>
+          </div>
         </div>
       </div>
     );
